@@ -25,7 +25,7 @@ Follow these steps to use this Macro: / 按照以下步骤使用此插件宏：
 1. If the input is correct, the curve will be automatically generated; otherwise, a corresponding error will be prompted. / 如果输入正确，程序则会自动生成波导弯曲；否则，会提示相应错误。
 1. Once you are familiar with these operations, you can draw waveguide bends very efficiently. / 熟悉操作之后，可以非常高效的进行波导弯曲绘制。
 1. In most cases, as long as the points on the two wires do not overlap with the connecting points, this Macro should be able to generate a connection curve without the geometry of the wires meeting any requirements; 
-   however, due to unavoidable numerical stability issues, some connections with excessive bending angles cannot be satisfactorily satisfied, and the program will remind you when if that's the case (you can choose whether or not to continue drawing the curve; curve quality is not guaranteed). 
+   however, due to unavoidable numerical stability issues, some connections with excessive bending angles cannot be satisfactorily satisfied, and the program will remind you when that's the case (you can choose whether or not to continue drawing the curve; curve quality is not guaranteed). 
    It should be noted that if a connection cannot be satisfied by the Macro, usually no other connection method can be found. 
    / 绝大多数情况下，只要两个线段上的点不与连接端点重合，程序均能够生成连接曲线，无需几何形状满足任何要求；
    不过，由于无法避免的数值稳定性问题，存在部分弯曲角度过大的连接无法被良好满足，程序在相应情况下会予以提醒（可选择是否继续绘制；不保证绘制质量）。

@@ -216,7 +216,7 @@ uwb_pts_t UWB_Calc(LPoint ptWire1Aux, LPoint ptWire1End, LPoint ptWire2Aux, LPoi
 				return pts;
 			}
 			else if (align < 0) {
-				// Wire1 too short / 第2线段过短
+				// Wire1 too short / 第1线段过短
 				LPoint ptExtWireEnd;
 				ptExtWireEnd.x = (LCoord)(vecWire1End(0) + vecProj2on1(0));
 				ptExtWireEnd.y = (LCoord)(vecWire1End(1) + vecProj2on1(1));
@@ -311,7 +311,7 @@ uwb_pts_t UWB_Calc(LPoint ptWire1Aux, LPoint ptWire1End, LPoint ptWire2Aux, LPoi
 				(vecWire2Aux - vecWire2End).dot(vecWire1End - vecWire2End)
 				/ (vecWire2Aux - vecWire2End).dot(vecWire2Aux - vecWire2End);
 			vecMid = vecWire2End + (vecWire1End - vecWire2End - vecProj1on2) / 2;
-			vecDir = vecWire2Aux - vecWire2End;
+			vecDir = vecWire2End - vecWire2Aux;
 		}
 		LPoint ptAuxWireEnd, ptAuxWire1Aux, ptAuxWire2Aux;
 		ptAuxWireEnd.x = (LCoord)vecMid(0);
@@ -467,7 +467,15 @@ uwb_pts_t UWB_Bend(LPoint ptWireAux, LPoint ptWireEnd, LPoint ptEnd, LPoint ptEn
 	matAlpha2.colwise() += matAlpha.col(alpha_n);
 	mat_real matPtsRel(2, 2 * alpha_n + 1);
 	matPtsRel << matAlpha, matAlpha2.block(0, 0, 2, alpha_n).rowwise().reverse();
-	matPtsRel /= matPtsRel.col(matPtsRel.cols() - 1).norm();
+	// Normalization & Scaling / 归一化 & 缩放
+	mat2x2_real matPtsRelRot1, matPtsRelRot2;
+	matPtsRelRot1 <<
+		matPtsRel.col(matPtsRel.cols() - 1)(0), -matPtsRel.col(matPtsRel.cols() - 1)(1),
+		matPtsRel.col(matPtsRel.cols() - 1)(1), matPtsRel.col(matPtsRel.cols() - 1)(0);
+	matPtsRelRot2 <<
+		vecEndBasis(0), -vecEndBasis(1),
+		vecEndBasis(1), vecEndBasis(0);
+	matPtsRel = matPtsRelRot2 * matPtsRelRot1.inverse() * matPtsRel;
 	// Change back to standard basis / 转换回原坐标系
 	matPtsRel = matBasis * matPtsRel;
 	matPtsRel *= (vecEnd - vecWireEnd).cast<linalg_real>().norm();
